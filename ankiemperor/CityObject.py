@@ -1,17 +1,16 @@
 class CityObject(object):
-
     def __init__(self, objectInfo):
-        self.objectID = objectInfo['objectID']
-        self.name = objectInfo['name']
-        self.nameOrig = objectInfo['nameOrig']
-        self.cityid = objectInfo['cityid']
-        self.price = objectInfo['price']
-        self.__rounds = objectInfo['rounds']
-        self.__state = objectInfo['state']
-        self.desc = objectInfo['desc']
-        self.image = objectInfo['image']
-        self.link = objectInfo['link']
-        self.cityName = ''  # Save the city name for faster access
+        self.objectID = objectInfo["objectID"]
+        self.name = objectInfo["name"]
+        self.nameOrig = objectInfo["nameOrig"]
+        self.cityid = objectInfo["cityid"]
+        self.price = objectInfo["price"]
+        self.__rounds = objectInfo["rounds"]
+        self.__state = objectInfo["state"]
+        self.desc = objectInfo["desc"]
+        self.image = objectInfo["image"]
+        self.link = objectInfo["link"]
+        self.cityName = ""  # Save the city name for faster access
 
     def getRemainingRounds(self):
         return self.__state

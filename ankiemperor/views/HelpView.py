@@ -2,13 +2,12 @@ from ankiemperor.util import *
 
 
 class HelpView(object):
-
     def __init__(self, ae):
         pass
 
     def help(self):
 
-        html = '''<h1>AnkiEmperor Help</h1>
+        html = """<h1>AnkiEmperor Help</h1>
 
             <style type='text/css'>
                 table.alternate tr:nth-child(odd)   { background-color:#f3f3f3; }
@@ -106,5 +105,8 @@ How long will it take you to become Emperor?</p>
             <p>After 100 cards, every two cards you get correct will advance you a round.</p>
 
             <br><a href="MainView||main">&lt;&lt; Back to main view</a>
-        ''' % (getIcon(GOLD_ICON), getIcon(ROUND_ICON))
+        """ % (
+            getIcon(GOLD_ICON),
+            getIcon(ROUND_ICON),
+        )
         return html

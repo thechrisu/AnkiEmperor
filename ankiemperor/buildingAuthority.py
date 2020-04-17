@@ -1,5 +1,4 @@
 class BuildingAuthority(object):
-
     def __init__(self, ae, world):
         self.world = world
         self.treasureChest = ae.getTreasureChest()
@@ -16,7 +15,7 @@ class BuildingAuthority(object):
     def buildObject(self, objectid):
 
         # buildObject should not be called if already building: Error!
-        #if self.getBuildingObject():
+        # if self.getBuildingObject():
         #    raise
         if self.__currentCity and not self.world.getBuildingObject():
             buildObject = self.__currentCity.getCityObject(objectid)
@@ -26,12 +25,12 @@ class BuildingAuthority(object):
                 self.world.startedBuilding(buildObject)
                 self.save()
 
-        self.ae.command('MainView||main')
+        self.ae.command("MainView||main")
 
     # Update the building progress.
     # Returns True if a construction is complete
     def updateBuildingProgress(self, lastQuality, cardsAnsweredToday):
-      # Only if the last card was not failed, construnctions are updated
+        # Only if the last card was not failed, construnctions are updated
         if lastQuality > 1:
             self.enableUndo = True
             finishedObject = self.world.updateBuildingProgress(cardsAnsweredToday)
@@ -64,7 +63,7 @@ class BuildingAuthority(object):
         if self.treasureChest.useGold(city.getPrice()) is True:
             self.world.unlockCity(city)
             self.save()
-            self.ae.command('CitySelectView||selection')
+            self.ae.command("CitySelectView||selection")
             return True
         else:
             return False

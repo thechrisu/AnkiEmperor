@@ -10,7 +10,6 @@ from .ankiemperor import *
 
 
 class AnkiEmperor(QDialog):
-
     def __init__(self):
 
         # Setup
@@ -19,12 +18,18 @@ class AnkiEmperor(QDialog):
         self.__options = Options(self.db)
         self.__eventManager = EventManager(self, self.__options, self.__treasureChest)
         self.__stats = Stats(self.db, self.__eventManager)
-        world = World(self.db, self.__options.getOption('activeCountry'))
+        world = World(self.db, self.__options.getOption("activeCountry"))
         self.__buildingAuthority = BuildingAuthority(self, world)
         self.__ranks = Ranks(self.db, self.__eventManager, world)
-        self.__ranks.updateRank(self.__treasureChest.getTotalGold(), self.__buildingAuthority.getActiveCountry().getCompletedObjectsPercentage(), True)
-        self.__layout = None    # Setup as a property as we must be able to clear it
-        self.__view = None  # Keep's track of current view. Useful if we want to update a view, but we're not sure which one
+        self.__ranks.updateRank(
+            self.__treasureChest.getTotalGold(),
+            self.__buildingAuthority.getActiveCountry().getCompletedObjectsPercentage(),
+            True,
+        )
+        self.__layout = None  # Setup as a property as we must be able to clear it
+        self.__view = (
+            None
+        )  # Keep's track of current view. Useful if we want to update a view, but we're not sure which one
         self.deckSelected = False
 
         # Setup window
@@ -66,7 +71,7 @@ class AnkiEmperor(QDialog):
     def getEventManager(self):
         return self.__eventManager
 
-    #Sets
+    # Sets
     def setView(self, view):
         self.__view = view
 
@@ -75,11 +80,15 @@ class AnkiEmperor(QDialog):
     def show(self):
 
         # Can we display it on the right?
-        if (QDesktopWidget().width() - mw.pos().x() - mw.width() - self.width() - 50) > 0:
+        if (
+            QDesktopWidget().width() - mw.pos().x() - mw.width() - self.width() - 50
+        ) > 0:
             self.move(mw.pos().x() + mw.width() + 50, mw.pos().y() - 100)
 
         # Can we display it on the left?
-        elif (QDesktopWidget().width() - mw.pos().x() + self.width() + 50) < QDesktopWidget().width():
+        elif (
+            QDesktopWidget().width() - mw.pos().x() + self.width() + 50
+        ) < QDesktopWidget().width():
             self.move(mw.pos().x() - self.width() - 50, mw.pos().y() - 100)
 
         # Show window
@@ -89,13 +98,13 @@ class AnkiEmperor(QDialog):
     # This lets us show AnkiEmperor in the correct position
     def onProfileLoaded(self):
 
-         # Show window if required.
-        if self.__options.getOption('openOnLaunch'):
+        # Show window if required.
+        if self.__options.getOption("openOnLaunch"):
             self.show()
 
     # Take gold away if card undone
     def undo(self, _Collection):
-        if self.__options.getOption('pluginEnabled'):
+        if self.__options.getOption("pluginEnabled"):
             self.__treasureChest.undo()
             self.__buildingAuthority.undo()
             self.__stats.undo()
@@ -106,22 +115,28 @@ class AnkiEmperor(QDialog):
     # Update AnkiEmperor when we answer a card
     def answerCard(self, Reviewer, ease):
 
-        if self.__options.getOption('pluginEnabled'):
+        if self.__options.getOption("pluginEnabled"):
             self.setQuality(ease)
             cardsAnsweredToday = self.__stats.cardAnswered(self.__lastQuality)
             self.__stats.save()
 
             # Update the building process
-            self.__buildingAuthority.updateBuildingProgress(self.__lastQuality, cardsAnsweredToday)
+            self.__buildingAuthority.updateBuildingProgress(
+                self.__lastQuality, cardsAnsweredToday
+            )
             self.__buildingAuthority.save()
 
             # Update rank
-            self.__ranks.updateRank(self.__treasureChest.getTotalGold(), self.__buildingAuthority.getActiveCountry().getCompletedObjectsPercentage(), False)
+            self.__ranks.updateRank(
+                self.__treasureChest.getTotalGold(),
+                self.__buildingAuthority.getActiveCountry().getCompletedObjectsPercentage(),
+                False,
+            )
 
-             # Display popup and perform event action whenever a major event has occured
+            # Display popup and perform event action whenever a major event has occured
             event = self.__eventManager.getNextEvent()
 
-            if (event):
+            if event:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.NoIcon)
                 msg.setWindowTitle(getPluginName())
@@ -130,7 +145,9 @@ class AnkiEmperor(QDialog):
                 msg.exec_()
 
             # calculate earned gold
-            self.__treasureChest.updateGold(Reviewer.card, self.__lastQuality, cardsAnsweredToday, False)
+            self.__treasureChest.updateGold(
+                Reviewer.card, self.__lastQuality, cardsAnsweredToday, False
+            )
             self.__treasureChest.save()
 
             # Update the current view to show new gold etc
@@ -167,7 +184,7 @@ class AnkiEmperor(QDialog):
         # command[0] = object
         # command[1] = method
         # command[2+] = arguments
-        command = commandString.split('||')
+        command = commandString.split("||")
 
         # Get the arguments, if any and remove non arguments
         arguments = command[:]
@@ -218,12 +235,11 @@ class AnkiEmperor(QDialog):
         if mw.col is not None:
             self.deckSelected = True
             deck = mw.col.decks.current()
-            self.__options.readDeckOptions(deck['id'])
-
+            self.__options.readDeckOptions(deck["id"])
 
         if self.getView() == "SettingsView||settings":
             self.command(self.getView())
 
         # Show window if autoOpen is enabled
-        if self.__options.getOption('autoOpen') and self.isHidden():
+        if self.__options.getOption("autoOpen") and self.isHidden():
             self.show()

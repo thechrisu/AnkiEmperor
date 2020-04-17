@@ -9,10 +9,10 @@ class TreasureChest(object):
 
     def __init__(self, db):
         self.db = db
-        self.currentGold = int(self.db.readData('currentGold'))
-        self.__totalGold = int(self.db.readData('totalGold'))
+        self.currentGold = int(self.db.readData("currentGold"))
+        self.__totalGold = int(self.db.readData("totalGold"))
         # Amount of gold gained, used for undo functionality
-        self.undoGold = array('i')
+        self.undoGold = array("i")
         self.goldFade = None
         self.newGold = 0
 
@@ -45,7 +45,7 @@ class TreasureChest(object):
     # This makes sure the gold and events show at the right time
     def updateGold(self, card, lastQuality, cardsAnsweredToday, undo=True):
         # calculate bonus based on maturity
-        if (card.queue == 0):
+        if card.queue == 0:
             self.newGold += self.NEW_CARD_GOLD
         else:
             self.newGold += self.CARD_GOLD
@@ -53,7 +53,7 @@ class TreasureChest(object):
         # calculate bonus based on ease
         bonus = 0
 
-        if (1 < lastQuality <= 4):
+        if 1 < lastQuality <= 4:
             bonus = lastQuality
 
         # Sadly I can't find anything that shows how many times a card has been answred successivly correct
@@ -89,12 +89,12 @@ class TreasureChest(object):
         # Set newGold back to 0
         self.newGold = 0
 
-        #deckstats = anki.stats.DeckStats(mw.deck)
-        #cardcount1day = deckstats.getRepsDone(-1, 0)
+        # deckstats = anki.stats.DeckStats(mw.deck)
+        # cardcount1day = deckstats.getRepsDone(-1, 0)
 
     # On undo, substract the gold from the last round
     def undo(self):
-        self.currentGold += (self.undoGold[-1] * -1)
+        self.currentGold += self.undoGold[-1] * -1
         self.undoGold.pop()
 
         # If we have gone through all the undos, just take 2 away for the rest
@@ -107,5 +107,5 @@ class TreasureChest(object):
 
     # Save progress to database
     def save(self):
-        self.db.writeData('currentGold', self.currentGold)
-        self.db.writeData('totalGold', self.__totalGold)
+        self.db.writeData("currentGold", self.currentGold)
+        self.db.writeData("totalGold", self.__totalGold)

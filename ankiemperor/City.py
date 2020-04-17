@@ -2,13 +2,12 @@ from .ankiemperor.CityObject import CityObject
 
 
 class City(object):
-
     def __init__(self, cityInfo):
-        self.__cityId = cityInfo['cityID']
-        self.name = cityInfo['city']
-        self.price = cityInfo['cityPrice']
-        self.constructionsNeeded = cityInfo['constructionsNeeded']
-        self.__isCapital = cityInfo['isCapital']
+        self.__cityId = cityInfo["cityID"]
+        self.name = cityInfo["city"]
+        self.price = cityInfo["cityPrice"]
+        self.constructionsNeeded = cityInfo["constructionsNeeded"]
+        self.__isCapital = cityInfo["isCapital"]
         self.cityObjects = []
 
     def getCityId(self):
@@ -47,7 +46,7 @@ class City(object):
 
     # Get the number of completed constructions in this city
     def getCompletedObjectsCount(self):
-        return (self.getTotalObjectsCount() - len(self.getUnbuiltObjects(True)))
+        return self.getTotalObjectsCount() - len(self.getUnbuiltObjects(True))
 
     # Get the number of total constructions in this city
     def getTotalObjectsCount(self):

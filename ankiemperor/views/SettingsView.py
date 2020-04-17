@@ -5,7 +5,6 @@ from ankiemperor.Options import *
 
 
 class SettingsView(object):
-
     def __init__(self, ae):
 
         # Get options
@@ -17,21 +16,42 @@ class SettingsView(object):
 
     def settings(self):
         html = "<h1>%s Settings</h1>" % getPluginName()
-        html += '<h2>Global options</h2>'
-        html += '<table>'
+        html += "<h2>Global options</h2>"
+        html += "<table>"
         for key, option in self.options.getGlobalOptions().items():
             if isinstance(option, BooleanOption):
-                html += '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s">?</a>]:</td><td><a href="SettingsView||changeGlobalOption||%s">%s</a></td></tr>' % (option.desc, option.desc, option.longDesc, key, option.getValue())
+                html += (
+                    '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s">?</a>]:</td><td><a href="SettingsView||changeGlobalOption||%s">%s</a></td></tr>'
+                    % (
+                        option.desc,
+                        option.desc,
+                        option.longDesc,
+                        key,
+                        option.getValue(),
+                    )
+                )
             else:
-                html += '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s">?</a>]:</td><td>%s</td></tr>' % (option.desc, option.desc, option.longDesc, option.getValue())
-        html += '</table>'
+                html += (
+                    '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s">?</a>]:</td><td>%s</td></tr>'
+                    % (option.desc, option.desc, option.longDesc, option.getValue())
+                )
+        html += "</table>"
 
-        if (self.deckSelected):
-            html += '<h2>Current deck options</h2>'
-            html += '<table>'
+        if self.deckSelected:
+            html += "<h2>Current deck options</h2>"
+            html += "<table>"
             for key, option in self.options.getDeckOptions().items():
-                html += '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s"">?</a>]:</td><td><a href="SettingsView||changeDeckOption||%s">%s</a></td></tr>' % (option.desc, option.desc, option.longDesc, key, option.getValue())
-            html += '</table><br>'
+                html += (
+                    '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s"">?</a>]:</td><td><a href="SettingsView||changeDeckOption||%s">%s</a></td></tr>'
+                    % (
+                        option.desc,
+                        option.desc,
+                        option.longDesc,
+                        key,
+                        option.getValue(),
+                    )
+                )
+            html += "</table><br>"
 
         html += '<br /><a href="MainView||main">&lt;&lt; Back to main view</a>'
 
@@ -52,5 +72,5 @@ class SettingsView(object):
         return self.settings()
 
     def showDescription(self, optionDesc, optionLongDesc):
-        QMessageBox.information(mw, 'Option: %s' % optionDesc, '%s' % optionLongDesc)
+        QMessageBox.information(mw, "Option: %s" % optionDesc, "%s" % optionLongDesc)
         self.ae.setView("SettingsView||settings")

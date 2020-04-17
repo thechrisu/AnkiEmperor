@@ -2,7 +2,6 @@ from .ankiemperor.Country import Country
 
 
 class World(object):
-
     def __init__(self, db, activeCountryName):
         self.countries = []
         self.buildingObject = None
@@ -18,22 +17,28 @@ class World(object):
         cities = db.getAllCities()
 
         for city in cities:
-            self.getCountry(city['country'], True).addCity(city)
+            self.getCountry(city["country"], True).addCity(city)
 
         # Now set the dataVersion for all countries (for update checks)
         for country in self.getCountries():
-            country.setDatasetVersion(db.readData('ds%sVersion' % country.getName()))
+            country.setDatasetVersion(db.readData("ds%sVersion" % country.getName()))
 
         # Create city objects
         objects = db.getAllObjects()
 
         for object in objects:
             # Add the object to the country and city
-            self.getCountry(object['country'], False).getCity(object['city']).addCityObject(object)
+            self.getCountry(object["country"], False).getCity(
+                object["city"]
+            ).addCityObject(object)
 
             # Check if the object is currently being built
-            if object['state'] > 0:
-                self.buildingObject = self.getCountry(object['country'], False).getCity(object['city']).getCityObject(object['objectID'])
+            if object["state"] > 0:
+                self.buildingObject = (
+                    self.getCountry(object["country"], False)
+                    .getCity(object["city"])
+                    .getCityObject(object["objectID"])
+                )
 
     # Return a country by name
     def getCountry(self, countryName, createIfNotExists):
@@ -80,7 +85,7 @@ class World(object):
         if self.buildingObject:
 
             # After more than 100 cards, only advance every second round
-            if ((cardsAnsweredToday < 100) or (cardsAnsweredToday % 2 == 0)):
+            if (cardsAnsweredToday < 100) or (cardsAnsweredToday % 2 == 0):
                 self.buildingObject.advanceOneRound()
 
                 # Check if the build is finished now

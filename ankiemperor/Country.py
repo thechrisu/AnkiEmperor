@@ -1,7 +1,7 @@
 from .ankiemperor.City import City
 
 
-class Country(object): 
+class Country(object):
     # The cached number of all constructions in this country
     totalObjectsCount = None
     __datasetVersion = None
@@ -64,8 +64,8 @@ class Country(object):
 
     # Return the total number of constructions already completed in this country
     def getCompletedObjectsCount(self):
-        return (self.getTotalObjectsCount() - self.getUnbuiltObjectsCount())
+        return self.getTotalObjectsCount() - self.getUnbuiltObjectsCount()
 
     # Get the percentage of completed constructions in this country (0-100)
     def getCompletedObjectsPercentage(self):
-        return (self.getCompletedObjectsCount()*100/self.getTotalObjectsCount())
+        return self.getCompletedObjectsCount() * 100 / self.getTotalObjectsCount()

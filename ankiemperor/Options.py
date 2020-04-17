@@ -3,7 +3,6 @@ from .ankiemperor.util import *
 
 # Options
 class Options(object):
-
     def __init__(self, db):
         self.db = db
         self.currentDeck = None
@@ -16,19 +15,54 @@ class Options(object):
 
         # Add global options to list
         for option in options:
-            self.__globalOptions[option['option']].setValue(option['value'])
+            self.__globalOptions[option["option"]].setValue(option["value"])
 
     # Set default global options
     def initGlobalOptions(self):
-        self.__globalOptions['activeCountry'] = Option('activeCountry', 'Active country', 'The active country in %s. Only one country can be active at a time.' % getPluginName(), 'Japan')
-        self.__globalOptions['openOnLaunch'] = BooleanOption('openOnLaunch', 'Open on launch', 'Determines if %s opens automatically when you launch Anki.' % getPluginName(), True)
-        self.__globalOptions['openOnComplete'] = BooleanOption('openOnComplete', 'Open on complete', 'Determines if %s opens automatically if it is currently hidden and a construction is completed.' % getPluginName(), True)
-        self.__globalOptions['soundEnabled'] = BooleanOption('soundEnabled', 'Sound enabled', 'Determines if a sound is played for major events.', True)
+        self.__globalOptions["activeCountry"] = Option(
+            "activeCountry",
+            "Active country",
+            "The active country in %s. Only one country can be active at a time."
+            % getPluginName(),
+            "Japan",
+        )
+        self.__globalOptions["openOnLaunch"] = BooleanOption(
+            "openOnLaunch",
+            "Open on launch",
+            "Determines if %s opens automatically when you launch Anki."
+            % getPluginName(),
+            True,
+        )
+        self.__globalOptions["openOnComplete"] = BooleanOption(
+            "openOnComplete",
+            "Open on complete",
+            "Determines if %s opens automatically if it is currently hidden and a construction is completed."
+            % getPluginName(),
+            True,
+        )
+        self.__globalOptions["soundEnabled"] = BooleanOption(
+            "soundEnabled",
+            "Sound enabled",
+            "Determines if a sound is played for major events.",
+            True,
+        )
 
     # Set default deck options
     def initDeckOptions(self):
-        self.__deckOptions['pluginEnabled'] = BooleanOption('pluginEnabled', '%s enabled' % getPluginName(), 'Determines if answering cards on this deck will advance the state of %s.' % getPluginName(), True)
-        self.__deckOptions['autoOpen'] = BooleanOption('autoOpen', 'AutoOpen enabled', 'Determines if %s opens automatically when loading this deck.' % getPluginName(), True)
+        self.__deckOptions["pluginEnabled"] = BooleanOption(
+            "pluginEnabled",
+            "%s enabled" % getPluginName(),
+            "Determines if answering cards on this deck will advance the state of %s."
+            % getPluginName(),
+            True,
+        )
+        self.__deckOptions["autoOpen"] = BooleanOption(
+            "autoOpen",
+            "AutoOpen enabled",
+            "Determines if %s opens automatically when loading this deck."
+            % getPluginName(),
+            True,
+        )
 
     # Read options for the current deck
     def readDeckOptions(self, deckId):
@@ -37,7 +71,7 @@ class Options(object):
         options = self.db.getOptions(deckId)
 
         for option in options:
-            self.__deckOptions[option['option']].setValue(option['value'])
+            self.__deckOptions[option["option"]].setValue(option["value"])
 
     # Change a deck specific option
     def changeDeckOption(self, key, newValue):
@@ -68,7 +102,6 @@ class Options(object):
 
 # A single option
 class Option(object):
-
     def __init__(self, name, desc, longDesc, value):
         self.name = name
         self.desc = desc
@@ -84,6 +117,5 @@ class Option(object):
 
 # A single boolean option (False/True)
 class BooleanOption(Option):
-
     def getValue(self):
         return bool(int(self._value))
