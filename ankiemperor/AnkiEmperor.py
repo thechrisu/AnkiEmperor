@@ -6,7 +6,7 @@ from aqt import mw
 from aqt.reviewer import Reviewer
 from aqt.webview import AnkiWebView
 from aqt.qt import *
-from ankiemperor import *
+from .ankiemperor import *
 
 
 class AnkiEmperor(QDialog):

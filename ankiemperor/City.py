@@ -1,4 +1,4 @@
-from ankiemperor.CityObject import CityObject
+from .ankiemperor.CityObject import CityObject
 
 
 class City(object):

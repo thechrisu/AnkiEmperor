@@ -19,7 +19,7 @@ class SettingsView(object):
         html = "<h1>%s Settings</h1>" % getPluginName()
         html += '<h2>Global options</h2>'
         html += '<table>'
-        for key, option in self.options.getGlobalOptions().iteritems():
+        for key, option in self.options.getGlobalOptions().items():
             if isinstance(option, BooleanOption):
                 html += '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s">?</a>]:</td><td><a href="SettingsView||changeGlobalOption||%s">%s</a></td></tr>' % (option.desc, option.desc, option.longDesc, key, option.getValue())
             else:
@@ -29,7 +29,7 @@ class SettingsView(object):
         if (self.deckSelected):
             html += '<h2>Current deck options</h2>'
             html += '<table>'
-            for key, option in self.options.getDeckOptions().iteritems():
+            for key, option in self.options.getDeckOptions().items():
                 html += '<tr><td width="140">%s [<a href="SettingsView||showDescription||%s||%s"">?</a>]:</td><td><a href="SettingsView||changeDeckOption||%s">%s</a></td></tr>' % (option.desc, option.desc, option.longDesc, key, option.getValue())
             html += '</table><br>'
 

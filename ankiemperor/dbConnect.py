@@ -1,7 +1,7 @@
 import codecs
 import os.path
 import sqlite3
-from ankiemperor.util import *
+from .ankiemperor.util import *
 
 
 class DBConnect(object):

@@ -1,4 +1,4 @@
-from ankiemperor.Country import Country
+from .ankiemperor.Country import Country
 
 
 class World(object):

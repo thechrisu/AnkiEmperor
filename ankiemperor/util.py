@@ -14,10 +14,10 @@ base = os.path.dirname(os.path.realpath(__file__))
 
 def getAWFolder():
     try:
-        folder = unicode(os.path.join(base, ''), sys.getfilesystemencoding())
+        folder = str(os.path.join(base, ''), sys.getfilesystemencoding())
     except:
         try:
-            folder = unicode(os.path.join(base, ''), 'utf8')
+            folder = str(os.path.join(base, ''), 'utf8')
         except:
             folder = os.path.join(base, '')
     return folder
