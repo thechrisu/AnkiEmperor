@@ -1,6 +1,3 @@
-from .ankiemperor.util import *
-
-
 class Ranks(object):
     def __init__(self, db, eventManager, world):
         self.__goldRanks = db.getRanks(1)

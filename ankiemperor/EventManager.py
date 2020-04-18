@@ -1,5 +1,4 @@
 from anki import sound
-from .ankiemperor.util import *
 from collections import deque
 
 

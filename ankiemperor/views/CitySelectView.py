@@ -1,6 +1,7 @@
-from ankiemperor.util import *
+# from ankiemperor.util import *
 from operator import attrgetter
-from aqt.qt import *  # import all of the Qt GUI library
+
+# from aqt.qt import *  # import all of the Qt GUI library
 
 
 # The building authority is keeping track of all built attractions

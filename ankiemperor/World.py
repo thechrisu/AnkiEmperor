@@ -1,4 +1,4 @@
-from .ankiemperor.Country import Country
+from .Country import Country
 
 
 class World(object):
@@ -33,7 +33,7 @@ class World(object):
             ).addCityObject(object)
 
             # Check if the object is currently being built
-            if object["state"] > 0:
+            if object["state"] and object["state"] > 0:
                 self.buildingObject = (
                     self.getCountry(object["country"], False)
                     .getCity(object["city"])

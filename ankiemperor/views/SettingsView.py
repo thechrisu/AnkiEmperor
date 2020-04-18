@@ -1,10 +1,11 @@
 from aqt import mw
-from aqt.qt import *
-from ankiemperor.util import *
-from ankiemperor.Options import *
+
+# from aqt.qt import *
+# from ankiemperor.util import *
+# from ankiemperor.Options import *
 
 
-class SettingsView(object):
+class SettingsView:
     def __init__(self, ae):
 
         # Get options
@@ -14,7 +15,7 @@ class SettingsView(object):
 
         self.ae = ae
 
-    def settings(self):
+    def main(self):
         html = "<h1>%s Settings</h1>" % getPluginName()
         html += "<h2>Global options</h2>"
         html += "<table>"

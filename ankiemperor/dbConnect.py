@@ -1,7 +1,8 @@
 import codecs
 import os.path
 import sqlite3
-from .ankiemperor.util import *
+
+from .util import getAWFolder, getSqlPath
 
 
 class DBConnect(object):

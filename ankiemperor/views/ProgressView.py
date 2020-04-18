@@ -1,6 +1,7 @@
-from ankiemperor.util import *
+# from ankiemperor.util import *
 from operator import attrgetter
-from aqt.qt import *
+
+# from aqt.qt import *
 
 
 # The building authority is keeping track of all built attractions

@@ -1,5 +1,4 @@
-from .ankiemperor.util import *
-
+from .util import getPluginName
 
 # Options
 class Options(object):

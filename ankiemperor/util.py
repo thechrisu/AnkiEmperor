@@ -1,5 +1,4 @@
 import os.path
-from aqt import mw
 import sys
 
 GOLD_ICON = "gold.png"
@@ -52,9 +51,3 @@ def getLogo():
 
 def getLinkColor():
     return 'style="color: #008B8B"'
-
-
-def debug(debugText):
-    from aqt.qt import QMessageBox
-
-    QMessageBox.information(mw, getPluginName(), str(debugText))

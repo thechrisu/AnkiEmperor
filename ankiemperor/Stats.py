@@ -1,4 +1,3 @@
-from .ankiemperor.util import *
 from datetime import date
 
 

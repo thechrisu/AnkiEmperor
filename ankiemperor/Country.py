@@ -1,4 +1,4 @@
-from .ankiemperor.City import City
+from .City import City
 
 
 class Country(object):

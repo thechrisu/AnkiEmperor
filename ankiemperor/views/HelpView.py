@@ -1,11 +1,11 @@
-from ankiemperor.util import *
+from ..util import getIcon, GOLD_ICON, ROUND_ICON
 
 
 class HelpView(object):
     def __init__(self, ae):
         pass
 
-    def help(self):
+    def main(self):
 
         html = """<h1>AnkiEmperor Help</h1>
 

@@ -1,4 +1,4 @@
-from ankiemperor.AnkiEmperor import AnkiEmperor
+from .ankiemperor.AnkiEmperor import AnkiEmperor
 from anki.hooks import *
 
 ae = AnkiEmperor()

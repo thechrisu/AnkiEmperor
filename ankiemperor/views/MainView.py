@@ -1,7 +1,8 @@
-from aqt.qt import *
-from ankiemperor.util import *
-from ankiemperor.views.ProgressView import ProgressView
-from ankiemperor.EventManager import *
+# from aqt.qt import *
+from .ProgressView import ProgressView
+from ..util import getImagePath, getLogo, getLinkColor, getIcon, GOLD_ICON, ROUND_ICON
+
+# from ankiemperor.EventManager import *
 
 
 class MainView(object):
