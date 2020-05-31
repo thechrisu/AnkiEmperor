@@ -1,7 +1,8 @@
 from anki.hooks import wrap
 from anki.collection import _Collection  # Undo
 from anki.decks import DeckManager
-from anki.hooks import *
+
+# from anki.hooks import *
 from aqt import gui_hooks, mw
 from aqt.reviewer import Reviewer
 from aqt.webview import AnkiWebView
@@ -17,6 +18,10 @@ from aqt.qt import (
     QUrl,
 )
 
+import json
+from typing import Any, Dict
+
+from .actions import HIDE, OPEN_MAIN
 from .dbConnect import DBConnect
 from .treasureChest import TreasureChest
 from .Options import Options
@@ -27,10 +32,13 @@ from .buildingAuthority import BuildingAuthority
 from .Ranks import Ranks
 from .util import getPluginName
 from .views.MainView import MainView
+from .views.SettingsView import SettingsView
 
 
+# WELCOME TO THE GOD OBJECT. YOUR JOURNEY BEGINS HERE
 class AnkiEmperor(QDialog):
     def __init__(self):
+        mw.addonManager.setWebExports("AnkiEmperor", ".*")
 
         # Setup
         self.db = DBConnect()
@@ -55,10 +63,14 @@ class AnkiEmperor(QDialog):
         QDialog.__init__(self, mw, Qt.WindowTitleHint)
         self.setWindowTitle(getPluginName())
         self.resize(300, 800)
-        self.command("MainView||main")
+        gui_hooks.reviewer_did_answer_card.append(self.answerCard)
+        gui_hooks.webview_did_receive_js_message.append(self.links)
+        self.open_main()
 
         # Wrap Anki methods
-        gui_hooks.reviewer_did_answer_card.append(self.answerCard)
+
+        # This should probably be handled better
+        # Should each view have its own call to did_receive_js_message?
         # FIXME Investigate if there are native versions of these functions..
         _Collection.undo = wrap(_Collection.undo, self.undo)
         DeckManager.select = wrap(DeckManager.select, self.refreshSettings)
@@ -126,7 +138,7 @@ class AnkiEmperor(QDialog):
             self.__treasureChest.undo()
             self.__buildingAuthority.undo()
             self.__stats.undo()
-            self.command("MainView||main")
+            self.open_main()
             self.__buildingAuthority.save()
             self.__stats.save()
 
@@ -168,8 +180,7 @@ class AnkiEmperor(QDialog):
             )
             self.__treasureChest.save()
 
-            # Update the current view to show new gold etc
-            self.command("MainView||main")
+            self.open_main()
 
     # Update the Anki Emperor Window
     def updateWindow(self, html):
@@ -180,7 +191,6 @@ class AnkiEmperor(QDialog):
         # build view
         webview = AnkiWebView()
         webview.stdHtml(html)
-        # webview.setLinkHandler(self.links)
 
         # Clear old layout
         if self.__layout:
@@ -195,65 +205,45 @@ class AnkiEmperor(QDialog):
         self.setLayout(self.__layout)
         self.update()
 
-    # Executes commands
-    def command(self, commandString):
+    def open_main(self) -> None:
+        m = MainView(
+            self.deckSelected,
+            self.__treasureChest,
+            self.__buildingAuthority,
+            self.__ranks,
+            self.__options,
+        )
+        self.__view = m.__class__.__name__
+        self.updateWindow(m.main())
 
-        # Split command into an object, method and it's arguments
-        # command[0] = object
-        # command[1] = method
-        # command[2+] = arguments
-        command = commandString.split("||")
+    def open_settings(self) -> None:
+        m = SettingsView(self.__options, self.deckSelected, self.open_settings)
+        self.__view = m.__class__.__name__
+        self.updateWindow(m.main())
 
-        # Get the arguments, if any and remove non arguments
-        arguments = command[:]
-        arguments.pop(0)
-        arguments.pop(0)
+    # Anki's pycmd syntax is kind of like React's action/reducers
+    # if you squint your eyes a little bit.
+    # Except, that it's really an entire API by itself
+    # So, it's probably a good idea to treat it like a HTTP request, kinda.
+    # So, this function is like a HTTP-request handler (with requests pre-parsed in JSON)
+    # This function has to return valid JSON
+    def process_request(self, request: Dict[str, Any], context: Any) -> Any:
+        raise Exception("HIDE")
 
-        # Command to access one of AnkiEmperor's objects
-        if command[0] == "ae":
+        def h(*_):
+            raise Exception("HIDE")
 
-            # We have to remove another argument here. The extra "ae" at the begining of the command means more needs to be removed from the arguments list
-            arguments.pop(0)
+        handlers = {
+            OPEN_MAIN: lambda _: self._open_main(),
+            HIDE: h,
+        }  # lambda _: raise Exception("HIDE")} #self.hide()}
+        return handlers[request["type"]](request["payload"])
 
-            # Get AnkiEmperor Object
-            aeObject = getattr(self, command[1])()
-
-            # Run object's method
-            getattr(aeObject, command[2])(*arguments)
-        # Command to change the view
-        else:
-
-            # Set View (so we can refresh)
-            self.__view = commandString
-
-            # Get HTML/Main
-            from aqt.utils import showInfo
-
-            # showInfo(str(["HTML: ", command, arguments]))
-            # raise Exception(command[0], command[1])
-            # html = getattr(globals()[command[0]](self), command[1])(*arguments)
-
-            # Update window with new view
-            # OH GOD, I can't believe I'm seeing code like this.
-            # I mean kudos to the guy who first developed the add-on
-            # but I'm really having second thoughts about whether I *really*
-            # should fix this add-on up for Anki 2.1
-            self.updateWindow(MainView(self).main())
-
-    # Method to deal with links
-    def links(self, link):
-
-        # Do we want to hide the window?
-        if link == "hide":
-            self.hide()
-
-        # Is it an external link?
-        elif link.startswith("http"):
-            QDesktopServices.openUrl(QUrl(link))
-
-        # link must be a command to do something
-        else:
-            self.command(link)
+    def links(self, handled, message, context):
+        QMessageBox(self)
+        raise Exception("HIDE")
+        ret = self.process_request(json.loads(message), context)
+        return (True, ret)
 
     # Refresh the settings if the deck is changed
     def refreshSettings(self, DeckManager, did):
@@ -263,7 +253,7 @@ class AnkiEmperor(QDialog):
             self.__options.readDeckOptions(deck["id"])
 
         if self.__view.__class__.__name__ == "SettingsView":
-            self.command(self.getView())
+            self.open_settings()
 
         # Show window if autoOpen is enabled
         if self.__options.getOption("autoOpen") and self.isHidden():

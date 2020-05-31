@@ -2,13 +2,13 @@ import codecs
 import os.path
 import sqlite3
 
-from .util import getAWFolder, getSqlPath
+from .util import getAWFolder, getSqlPath, getDbPath
 
 
 class DBConnect(object):
     def __init__(self):
         doesDbExist = True
-        self.db = os.path.join(getAWFolder(), "ankiemperor.db")
+        self.db = getDbPath()
 
         # If there is no db file, it has to be created later
         if not os.path.isfile(self.db):

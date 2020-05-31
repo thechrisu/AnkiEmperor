@@ -1,19 +1,15 @@
 from aqt import mw
 
-# from aqt.qt import *
-# from ankiemperor.util import *
-# from ankiemperor.Options import *
+from aqt.qt import QMessageBox
+from ..util import getPluginName
+from ..Options import BooleanOption
 
 
 class SettingsView:
-    def __init__(self, ae):
-
-        # Get options
-        self.options = ae.getOptions()
-
-        self.deckSelected = ae.deckSelected
-
-        self.ae = ae
+    def __init__(self, options, deckSelected, refresh_func):
+        self.options = options
+        self.deckSelected = deckSelected
+        self.refresh_func = refresh_func
 
     def main(self):
         html = "<h1>%s Settings</h1>" % getPluginName()
@@ -62,16 +58,14 @@ class SettingsView:
     def changeDeckOption(self, optionKey):
         option = self.options.getDeckOptions()[optionKey]
         self.options.changeDeckOption(optionKey, not option.getValue())
-        self.ae.setView("SettingsView||settings")
+        self.refresh_func()
         return self.settings()
 
     # Change a global option
     def changeGlobalOption(self, optionKey):
         option = self.options.getGlobalOptions()[optionKey]
         self.options.changeGlobalOption(optionKey, not option.getValue())
-        self.ae.setView("SettingsView||settings")
-        return self.settings()
+        self.refresh_func()
 
     def showDescription(self, optionDesc, optionLongDesc):
         QMessageBox.information(mw, "Option: %s" % optionDesc, "%s" % optionLongDesc)
-        self.ae.setView("SettingsView||settings")

@@ -6,22 +6,25 @@ from ..util import getImagePath, getLogo, getLinkColor, getIcon, GOLD_ICON, ROUN
 
 
 class MainView(object):
-    def __init__(self, ae):
-        self.deckSelected = ae.deckSelected
-        self.progressView = ProgressView(ae)
-        self.treasureChest = ae.getTreasureChest()
-        self.__ranks = ae.getRanks()
-        self.buildingAuthority = ae.getBuildingAuthority()
-        self.options = ae.getOptions()
+    def __init__(
+        self, deck_selected, treasure_chest, building_authority, ranks, options
+    ):
+        self.deckSelected = deck_selected
+        self.treasureChest = treasure_chest
+        self.buildingAuthority = building_authority
+        self.progressView = ProgressView(building_authority, treasure_chest)
+        self.__ranks = ranks
+        self.options = options
 
     def main(self):
 
         html = "%s" % getLogo()
         html += """
+        <script type="text/javascript">pycmd('TEST');</script>
         <h2>Status</h2>"""
 
         html += "Rank: %s <br />" % self.__ranks.getRankDescription()
-        html += 'Gold: %s <img src="file:///%s">' % (
+        html += 'Gold: %s <img src="%s">' % (
             self.treasureChest.getCurrentGold(),
             getIcon(GOLD_ICON),
         )
@@ -56,13 +59,13 @@ class MainView(object):
                     buildingObject.name,
                 )
             )
-            html += '<p align="center"><img src="file:///%s"></p>' % getImagePath(
+            html += '<p align="center"><img src="%s"></p>' % getImagePath(
                 buildingObject.cityName, buildingObject.image
             )
             html += '<p align="center">%s</p>' % buildingObject.desc
             html += "Current city: %s" % buildingObject.cityName
             html += (
-                '<p style="font-size:large;">Remaining rounds: <strong>%s </strong><img src="file:///%s"></p>'
+                '<p style="font-size:large;">Remaining rounds: <strong>%s </strong><img src="%s"></p>'
                 % (buildingObject.getRemainingRounds(), getIcon(ROUND_ICON))
             )
             html += self.progressView._getProgressBar(
@@ -83,7 +86,8 @@ class MainView(object):
         <br />
         <a href="HelpView||help">Help</a><br />
         <br />
-        <a href="hide">Hide</a><br />
+        <a href="#" onclick=\"pycmd({type: 'hide'});return false;\">Hide</a><br />
+        <script type="text/javascript">pycmd('TEST');</script>
         """
 
         if not self.options.getOption("pluginEnabled") and self.deckSelected:

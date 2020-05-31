@@ -1,4 +1,4 @@
-# from ankiemperor.util import *
+from ..util import getIcon, getImagePath, getLinkColor, getPluginName, GOLD_ICON
 from operator import attrgetter
 
 # from aqt.qt import *
@@ -6,9 +6,9 @@ from operator import attrgetter
 
 # The building authority is keeping track of all built attractions
 class ProgressView(object):
-    def __init__(self, ae):
-        self.buildingAuthority = ae.getBuildingAuthority()
-        self.__treasureChest = ae.getTreasureChest()
+    def __init__(self, building_authority, treasure_chest):
+        self.buildingAuthority = building_authority
+        self.__treasureChest = treasure_chest
 
     # Display the progress view for all countries
     def overview(self):

@@ -12,6 +12,7 @@ base = os.path.dirname(os.path.realpath(__file__))
 
 
 def getAWFolder():
+    return "_addons/AnkiEmperor/ankiemperor/"
     try:
         folder = str(os.path.join(base, ""), sys.getfilesystemencoding())
     except:
@@ -21,14 +22,15 @@ def getAWFolder():
             folder = os.path.join(base, "")
     return folder
 
-
 def getSqlPath(sqlFile):
-    return os.path.join(getAWFolder(), "sql", "%s") % (sqlFile)
+    return os.path.join(base, "sql", "%s") % (sqlFile)
 
+def getDbPath():
+    return os.path.join(base, "ankiemperor.db")
 
 # Return the image folder
 def getImagePath(cityname, image):
-    return os.path.join(getAWFolder(), "img", "%s", image) % (cityname)
+    return os.path.join(getAWFolder(), "img", cityname, image)
 
 
 def getMajorEventSound():
@@ -44,7 +46,7 @@ def getPluginName():
 
 
 def getLogo():
-    return '<img src="file:///%s" width="220">' % os.path.join(
+    return '<img src="%s" width="220">' % os.path.join(
         getAWFolder(), "media", "logo.png"
     )
 

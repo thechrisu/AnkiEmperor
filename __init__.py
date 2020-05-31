@@ -1,5 +1,5 @@
 from .ankiemperor.AnkiEmperor import AnkiEmperor
-from anki.hooks import *
+from anki.hooks import addHook
 
-ae = AnkiEmperor()
-addHook("profileLoaded", ae.onProfileLoaded)
+# ae = AnkiEmperor()
+# addHook("profileLoaded", ae.onProfileLoaded)
